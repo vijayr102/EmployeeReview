@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from repository import get_employees, get_review_periods
-from models import Employee,ReviewPeriod
+from repository import get_employees, get_review_periods,get_reviews
+from models import Employee,ReviewPeriod,Review
 
 router = APIRouter()
 
@@ -12,3 +12,15 @@ def get_employees_endpoint():
 def get_review_periods_endpoint():
     # Placeholder for review periods logic
     return get_review_periods()
+
+@router.get("/reviews", response_model=list[Review])
+def get_reviews_endpoint():
+    return get_reviews()
+
+@router.get("/reviews/{review_id}", response_model=Review)
+def get_review_by_id(review_id: int):
+    reviews = get_reviews_id(review_id)
+    for review in reviews:
+        if review['id'] == review_id:
+            return review
+    return None

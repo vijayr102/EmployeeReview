@@ -18,3 +18,21 @@ def get_review_periods():
     cursor.close()
     conn.close()
     return review_periods
+
+def get_reviews():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM performance_reviews")
+    reviews = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return reviews
+
+def get_reviews_id(review_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM performance_reviews WHERE id = %s", (review_id,))
+    reviews = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return reviews
