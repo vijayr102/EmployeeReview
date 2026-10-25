@@ -1,5 +1,5 @@
 from database import get_connection
-from models import Employee,ReviewPeriod
+from models import Employee, Review,ReviewPeriod
 
 def get_employees():
     conn = get_connection()
@@ -32,7 +32,22 @@ def get_reviews_id(review_id: int):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM performance_reviews WHERE id = %s", (review_id,))
-    reviews = cursor.fetchall()
+    review = cursor.fetchone()
     cursor.close()
     conn.close()
-    return reviews
+    return review
+
+def create_review(review: Review):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO performance_reviews (employee_id, period_id, quality_rating, delivery_rating, teamwork_rating, comments, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *",
+        (review.employee_id, review.period_id, review.quality_rating, review.delivery_rating,
+         review.teamwork_rating, review.comments, review.created_at)
+    )
+    
+    review =cursor.fetchone()
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return review
