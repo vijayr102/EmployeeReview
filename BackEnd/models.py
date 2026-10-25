@@ -27,3 +27,11 @@ class Review(BaseModel):
     average_rating: float 
     comments: str | None = None
     created_at: datetime
+
+class ReviewCreate(BaseModel):
+    employee_id: int
+    period_id: int
+    quality_rating: int
+    delivery_rating: int
+    teamwork_rating: int
+    comments: str | None = None
